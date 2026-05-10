@@ -1,0 +1,96 @@
+dScope License
+Copyright (c) 2026 DynamoRed
+
+This Software (the "Software") is made source-available under the terms below.
+The Software is NOT open source as defined by the Open Source Initiative: it
+restricts modification, redistribution, and commercial use. Read this license
+carefully before using the Software.
+
+
+1. PERMITTED USE
+
+   You are granted a worldwide, royalty-free, non-exclusive, non-transferable
+   license to download, install, run, and view the source code of the Software
+   for personal, educational, or other strictly non-commercial purposes.
+
+
+2. NO MODIFICATION
+
+   You may not modify, adapt, translate, port, fork, refactor, reverse engineer,
+   decompile, disassemble, or create derivative works based on the Software, in
+   whole or in part, by any means or in any form. This includes, but is not
+   limited to, changes to the source code, the compiled output, the bundled
+   assets, or any documentation distributed with the Software.
+
+
+3. NO COMMERCIAL USE
+
+   You may not use the Software, in whole or in part, for any commercial
+   purpose. Commercial purposes include, without limitation:
+
+     a. selling, licensing, sublicensing, or renting the Software or any copy
+        of it, modified or not;
+     b. bundling the Software with, or incorporating it into, any product or
+        service offered for a fee or other consideration;
+     c. using the Software in the operation of a business, including internal
+        tooling, client work, or any revenue-generating activity;
+     d. using the Software to provide a paid service, including SaaS, hosted
+        offerings, consulting, or training;
+     e. using the Software to gain a commercial advantage of any kind.
+
+
+4. NO REDISTRIBUTION FOR PROFIT
+
+   You may not sell, sublicense, lease, or otherwise distribute the Software
+   for monetary or non-monetary consideration. Free, unmodified redistribution
+   to other private individuals is permitted, provided that:
+
+     a. the entire LICENSE file accompanies every copy;
+     b. the copyright notice and authorship attribution remain intact;
+     c. no fee, donation requirement, ad placement, or other consideration is
+        attached to the distribution.
+
+
+5. ATTRIBUTION
+
+   The above copyright notice, this license, and any authorship credits
+   present in the Software must be retained in all copies or substantial
+   portions of the Software. You may not remove, alter, or obscure any
+   copyright, trademark, or attribution notices.
+
+
+6. RESERVATION OF RIGHTS
+
+   All rights not expressly granted in this license are reserved by the
+   copyright holder. No rights are granted by implication, estoppel, or
+   otherwise. The copyright holder may grant a separate commercial or
+   modification license on request and on terms agreed in writing.
+
+
+7. TERMINATION
+
+   This license terminates automatically and immediately upon any breach of
+   its terms. Upon termination, you must cease all use of the Software and
+   destroy all copies in your possession or control. Sections 5, 6, 8, and 9
+   survive termination.
+
+
+8. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT.
+
+
+9. LIMITATION OF LIABILITY
+
+   IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY
+   CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT,
+   OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR
+   THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+10. CONTACT
+
+    For commercial licensing, modification rights, or any other use not
+    granted by this license, contact the copyright holder.
