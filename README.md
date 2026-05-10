@@ -55,3 +55,5 @@ Pick a source, a color mode, enable/disable anti-aliasing, and you are live. `Ct
 
 Source-available. Free for personal and non-commercial use. **No modifications, no redistribution for profit, no commercial use.** See [LICENSE](./LICENSE).
 Contact team@dynamored.com
+
+<img src="https://views-counter.vercel.app/badge?pageId=dscope-dynamored%2FViews-Counter&label=Views&rightColor=F8F2EA&leftColor=0B090A" alt="Views Counter">

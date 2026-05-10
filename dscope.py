@@ -25,6 +25,7 @@ SRC_REGION = 'region'
 
 MODE_COLOR = 'color'
 MODE_GRAY = 'gray'
+MODE_HICOLOR = 'hicolor'
 
 ASCII_CHARS_SIMPLE = " .:-=+*#%@"
 ASCII_CHARS_DENSE = " .'`^\",:;Il!i><~+_-?][}{1)(|/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
@@ -401,6 +402,7 @@ def select_mode():
     print("\n=== Display mode ===")
     print("  [1] Color (24-bit)")
     print("  [2] Grayscale")
+    print("  [3] HiColor (24-bit and 2x vertical sampling)")
 
     while True:
         choice = input("Choice: ").strip()
@@ -410,6 +412,9 @@ def select_mode():
 
         if choice == '2':
             return MODE_GRAY, 'Gray'
+
+        if choice == '3':
+            return MODE_HICOLOR, 'HiColor'
 
         print("  Invalid input.")
 
@@ -445,6 +450,76 @@ def get_frame(cam, sct, src_state, src_type):
 
     return cv2.cvtColor(img, cv2.COLOR_BGRA2BGR)
 
+def _render_hicolor(frame, target_w, target_h, antialiasing):
+    sample_h = max(2, target_h * 2)
+    small = cv2.resize(frame, (target_w, sample_h), interpolation=cv2.INTER_AREA)
+
+    if small.ndim == 2:
+        small = cv2.cvtColor(small, cv2.COLOR_GRAY2BGR)
+
+    if SATURATION_BOOST != 1.0:
+        hsv = cv2.cvtColor(small, cv2.COLOR_BGR2HSV).astype(np.float32)
+        hsv[..., 1] = np.clip(hsv[..., 1] * SATURATION_BOOST, 0, 255)
+        small = cv2.cvtColor(hsv.astype(np.uint8), cv2.COLOR_HSV2BGR)
+
+    gray_full = cv2.cvtColor(small, cv2.COLOR_BGR2GRAY)
+
+    if GAMMA != 1.0:
+        gray_full = _GAMMA_LUT[gray_full]
+
+    top = small[0::2]
+    bot = small[1::2]
+    gray = ((gray_full[0::2].astype(np.int32) + gray_full[1::2].astype(np.int32)) // 2).astype(np.uint8)
+
+    palette = _CHAR_ARR_DENSE
+    n_chars = len(palette) - 1
+    idx = (gray.astype(np.int32) * n_chars // 255).clip(0, n_chars)
+    char_grid = palette[idx]
+
+    if antialiasing:
+        blurred = cv2.GaussianBlur(gray, (3, 3), 0)
+        gx = cv2.Sobel(blurred, cv2.CV_32F, 1, 0, ksize=3)
+        gy = cv2.Sobel(blurred, cv2.CV_32F, 0, 1, ksize=3)
+        mag = np.sqrt(gx * gx + gy * gy)
+        edge_mask = mag > EDGE_THRESHOLD
+        angle = np.arctan2(gy, gx)
+        angle = np.where(angle < 0, angle + np.pi, angle)
+        bin_idx = np.floor((angle + np.pi / 8) / (np.pi / 4)).astype(np.int32) % 4
+        edge_grid = EDGE_CHARS[bin_idx]
+        char_grid = np.where(edge_mask, edge_grid, char_grid)
+
+    Rt = top[:, :, 2]
+    Gt = top[:, :, 1]
+    Bt = top[:, :, 0]
+    Rb = bot[:, :, 2]
+    Gb = bot[:, :, 1]
+    Bb = bot[:, :, 0]
+
+    out_lines = []
+
+    for y in range(target_h):
+        parts = ['\x1b[0m']
+        prev_fg = None
+        prev_bg = None
+
+        for x in range(target_w):
+            fg = (int(Rt[y, x]), int(Gt[y, x]), int(Bt[y, x]))
+            bg = (int(Rb[y, x]), int(Gb[y, x]), int(Bb[y, x]))
+
+            if fg != prev_fg:
+                parts.append(f"\x1b[38;2;{fg[0]};{fg[1]};{fg[2]}m")
+                prev_fg = fg
+
+            if bg != prev_bg:
+                parts.append(f"\x1b[48;2;{bg[0]};{bg[1]};{bg[2]}m")
+                prev_bg = bg
+
+            parts.append(char_grid[y, x])
+
+        out_lines.append(''.join(parts))
+
+    return '\x1b[0m\x1b[K\n'.join(out_lines) + '\x1b[0m\x1b[K'
+
 def render_ascii(frame, cols, rows, mode, antialiasing=False):
     if frame is None or frame.size == 0:
         return ''
@@ -461,6 +536,9 @@ def render_ascii(frame, cols, rows, mode, antialiasing=False):
         target_h = max(1, rows)
         target_w = max(1, int(target_h * (w / h) / CHAR_ASPECT_RATIO))
         target_w = min(target_w, cols)
+
+    if mode == MODE_HICOLOR:
+        return _render_hicolor(frame, target_w, target_h, antialiasing)
 
     small = cv2.resize(frame, (target_w, target_h), interpolation=cv2.INTER_AREA)
 
